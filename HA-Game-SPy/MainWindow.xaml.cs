@@ -1,18 +1,15 @@
-﻿using MaterialDesignThemes.Wpf;
-using Newtonsoft.Json;
+﻿using Newtonsoft.Json;
 using System;
 using System.IO;
 using System.Linq;
-using System.Threading.Tasks;
-using System.Windows;
 using System.Security.Cryptography;
 using System.Text;
+using System.Threading.Tasks;
+using System.Windows;
 
 namespace HA_Game_SPy
 {
-    /// <summary>
-    /// Interaction logic for MainWindow.xaml
-    /// </summary>
+
     public partial class MainWindow : Window
     {
         private bool isDarkTheme = false;
@@ -34,7 +31,6 @@ namespace HA_Game_SPy
 
                 // Additional initialization using settings if needed
             };
-
         }
 
         private async Task SaveSettingsAsync(Settings settings)
@@ -103,6 +99,7 @@ namespace HA_Game_SPy
         private void chkStartMinimized_Checked(object sender, RoutedEventArgs e)
         {
         }
+
         private async Task<Settings> LoadSettingsAsync()
         {
             string localFolder = Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData);
@@ -133,13 +130,12 @@ namespace HA_Game_SPy
                 chkStartMinimized.IsChecked = settings.StartMinimized;
                 chkStartWithWindows.IsChecked = settings.StartWithWindows;
                 txtMqttUsername.Text = settings.MqttUsername;
-                
+
                 txtMqttAddress.Text = settings.MqttAddress;
                 if (settings.Theme == "Dark")
                 {
                     ToggleThemeButton_Click(null, null);
                 }
-
             }
             else
             {
