@@ -63,7 +63,7 @@
         <CheckBox Grid.Row="12" x:Name="chkStartWithWindows" Content="Start with Windows" />
         <CheckBox Grid.Row="13" x:Name="chkStartMinimized" Content="Start Minimized" Checked="chkStartMinimized_Checked"/>
         <Button Content="Toggle Theme" Click="ToggleThemeButton_Click"
-                        Style="{DynamicResource MaterialDesignRaisedButton}" Margin="639,9,10,-23" Width="131" Grid.Row="13" />
+                        Style="{DynamicResource MaterialDesignRaisedButton}" Margin="324,18,324,-32" Width="131" Grid.Row="13" />
 
     </Grid>
 </Window>
