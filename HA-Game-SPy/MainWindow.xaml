@@ -1,0 +1,69 @@
+﻿<Window x:Class="HA_Game_SPy.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
+        Title="HA Game Spy" Height="450" Width="800"
+            TextElement.Foreground="{DynamicResource MaterialDesignBody}"
+    TextElement.FontWeight="Regular"
+    TextElement.FontSize="13"
+    TextOptions.TextFormattingMode="Ideal"
+    TextOptions.TextRenderingMode="Auto"
+    Background="{DynamicResource MaterialDesignPaper}"
+    FontFamily="{DynamicResource MaterialDesignFont}">
+    <Window.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <materialDesign:BundledTheme BaseTheme="Light" />
+                <ResourceDictionary Source="pack://application:,,,/MaterialDesignColors;component/Themes/Recommended/Primary/MaterialDesignColor.DeepPurple.xaml"/>
+                <ResourceDictionary Source="pack://application:,,,/MaterialDesignColors;component/Themes/Recommended/Accent/MaterialDesignColor.Lime.xaml"/>
+                <ResourceDictionary Source="pack://application:,,,/MaterialDesignThemes.Wpf;component/Themes/MaterialDesignTheme.Defaults.xaml" />
+                <ResourceDictionary Source="pack://application:,,,/MaterialDesignThemes.Wpf;component/Themes/MaterialDesignTheme.DataGrid.xaml" />
+            </ResourceDictionary.MergedDictionaries>
+
+
+        </ResourceDictionary>
+    </Window.Resources>
+    <Grid Margin="10">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+
+        <Label Grid.Row="0" Content="Home Assistant URL"/>
+        <TextBox Grid.Row="1" x:Name="txtHAUrl" Style="{DynamicResource MaterialDesignTextBox}"/>
+
+        <Label Grid.Row="2" Content="Long Lived Token"/>
+        <TextBox Grid.Row="3" x:Name="txtHAToken" Style="{DynamicResource MaterialDesignTextBox}"/>
+
+        <Button Grid.Row="4" x:Name="btnConnectHA" Content="Connect to Home Assistant" Style="{DynamicResource MaterialDesignRaisedButton}"/>
+
+        <Label Grid.Row="5" Content="MQTT Address"/>
+        <TextBox Grid.Row="6" x:Name="txtMqttAddress" Style="{DynamicResource MaterialDesignTextBox}"/>
+
+        <Label Grid.Row="7" Content="MQTT Username"/>
+        <TextBox Grid.Row="8" x:Name="txtMqttUsername" Style="{DynamicResource MaterialDesignTextBox}"/>
+
+        <Label Grid.Row="9" Content="MQTT Password"/>
+        <PasswordBox Grid.Row="10" x:Name="txtMqttPassword" Style="{DynamicResource MaterialDesignPasswordBox}"/>
+
+        <Button Grid.Row="11" x:Name="btnConnectMqtt" Content="Connect to MQTT" Style="{DynamicResource MaterialDesignRaisedButton}"/>
+
+        <CheckBox Grid.Row="12" x:Name="chkStartWithWindows" Content="Start with Windows" />
+        <CheckBox Grid.Row="13" x:Name="chkStartMinimized" Content="Start Minimized" Checked="chkStartMinimized_Checked"/>
+        <Button Content="Toggle Theme" Click="ToggleThemeButton_Click"
+                        Style="{DynamicResource MaterialDesignRaisedButton}" Margin="639,9,10,-23" Width="131" Grid.Row="13" />
+
+    </Grid>
+</Window>
