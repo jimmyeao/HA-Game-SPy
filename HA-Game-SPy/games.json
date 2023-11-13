@@ -8,6 +8,11 @@
     "gameName": "Discord",
     "executableName": "Discord.exe",
     "logoUrl": "https://i.pinimg.com/originals/5b/d3/76/5bd376d4098adbe81e5f5f0eb6d2f766.png"
+  },
+  {
+    "gameName": "Elite Dangerous",
+    "executableName": "EdLaunch.exe",
+    "logoUrl": "https://banner2.cleanpng.com/20180429/rsq/kisspng-elite-dangerous-video-game-twitch-youtube-5ae656dcb983c4.8593632615250449567599.jpg"
   }
   // ... more games
 ]
