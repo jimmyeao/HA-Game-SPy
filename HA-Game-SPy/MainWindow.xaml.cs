@@ -2,6 +2,7 @@
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Security.Cryptography;
@@ -11,17 +12,19 @@ using System.Windows;
 
 namespace HA_Game_SPy
 {
-
     public partial class MainWindow : Window
     {
         private bool isDarkTheme = false;
         private Settings settings;
         private MqttClientWrapper mqttClientWrapper;
         private List<GameInfo> games;
-
+        private string currentDetectedGame = "";
+        private string deviceId;
         public MainWindow()
         {
             InitializeComponent();
+            deviceId = Environment.MachineName; // Or generate a unique ID
+
             if (Properties.Settings.Default.UpdateSettings)
             {
                 Properties.Settings.Default.Upgrade();
@@ -47,6 +50,10 @@ namespace HA_Game_SPy
                         if (mqttClientWrapper != null && mqttClientWrapper.IsConnected)
                         {
                             mqttStatusText.Text = "MQTT Status: Connected";
+                            await PublishSensorConfiguration();
+                           // await mqttClientWrapper.PublishAsync(sensorConfigTopic, sensorConfigPayload);
+
+
                         }
                         else
                         {
@@ -58,6 +65,7 @@ namespace HA_Game_SPy
                         // Optionally handle connection failure on startup
                     }
                 }
+                _ = CheckForRunningGamesAsync();
                 // Additional initialization using settings if needed
             };
 
@@ -76,9 +84,7 @@ namespace HA_Game_SPy
             string localFolder = Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData);
             string settingsFilePath = Path.Combine(localFolder, "settings.json");
             settings.HomeAssistantUrl = txtHAUrl.Text;
-            settings.EncryptedHAToken = Convert.ToBase64String(ProtectedData.Protect(Encoding.UTF8.GetBytes(txtHAToken.Text),
-    null,
-    DataProtectionScope.CurrentUser));
+            settings.EncryptedHAToken = Convert.ToBase64String(ProtectedData.Protect(Encoding.UTF8.GetBytes(txtHAToken.Text),null,    DataProtectionScope.CurrentUser));
 
             settings.EncryptedMqttPassword = Convert.ToBase64String(ProtectedData.Protect(
                 Encoding.UTF8.GetBytes(txtMqttPassword.Password),
@@ -216,10 +222,12 @@ namespace HA_Game_SPy
                 mqttStatusText.Text = "MQTT Status: Disconnected";
             }
         }
+
         private async Task<List<GameInfo>> LoadGamesAsync()
         {
-            string localFolder = Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData);
-            string gamesFilePath = Path.Combine(localFolder, "games.json");
+            // Get the directory where the application is running
+            string appDirectory = AppDomain.CurrentDomain.BaseDirectory;
+            string gamesFilePath = Path.Combine(appDirectory, "games.json");
 
             if (File.Exists(gamesFilePath))
             {
@@ -229,6 +237,78 @@ namespace HA_Game_SPy
 
             return new List<GameInfo>(); // Return an empty list if file doesn't exist
         }
+
+        private async Task CheckForRunningGamesAsync()
+        {
+            while (true)
+            {
+                var runningProcesses = Process.GetProcesses();
+                var detectedGame = games.FirstOrDefault(game =>
+                    runningProcesses.Any(p =>
+                        p.ProcessName.Equals(Path.GetFileNameWithoutExtension(game.ExecutableName), StringComparison.OrdinalIgnoreCase)));
+
+                if (detectedGame != null)
+                {
+                    if (currentDetectedGame != detectedGame.GameName)
+                    {
+                        currentDetectedGame = detectedGame.GameName;
+                        UpdateUIAndPublishGame(detectedGame); // Pass the GameInfo object
+                    }
+                }
+                else if (!string.IsNullOrEmpty(currentDetectedGame))
+                {
+                    currentDetectedGame = "";
+                    var noGame = new GameInfo { GameName = "None", LogoUrl = "" };
+                    UpdateUIAndPublishGame(noGame); // Pass a GameInfo object for "None"
+                }
+
+                await Task.Delay(5000); // Check every 5 seconds
+            }
+        }
+
+
+        private void UpdateUIAndPublishGame(GameInfo game)
+        {
+            Dispatcher.Invoke(() =>
+            {
+                // Debug statement to check if this block is executed
+                Debug.WriteLine($"Updating UI for game: {game.GameName}");
+
+                detectedGameText.Text = $"Detected Game: {game.GameName}";
+                // Other UI updates
+            });
+            string stateTopic = $"HAGameSpy/{deviceId}/state";
+            string attributesTopic = $"HAGameSpy/{deviceId}/attributes";
+
+            var attributes = new { gamename = game.GameName, gamelogourl = game.LogoUrl };
+            string attributesPayload = JsonConvert.SerializeObject(attributes);
+
+            _ =mqttClientWrapper.PublishAsync(stateTopic, game.GameName); // Publish game name as state
+            _ = mqttClientWrapper.PublishAsync(attributesTopic, attributesPayload); // Publish attributes
+        }
+
+        private async Task PublishSensorConfiguration()
+        {
+            var sensorConfig = new
+            {
+                name = $"HAGameSpy {deviceId}",
+                state_topic = $"HAGameSpy/{deviceId}/state",
+                json_attributes_topic = $"HAGameSpy/{deviceId}/attributes",
+                unique_id = $"hagamespy_{deviceId}",
+                device = new
+                {
+                    identifiers = new string[] { $"hagamespy_{deviceId}" },
+                    name = "HAGameSpy",
+                    manufacturer = "YourManufacturer",
+                    model = "YourModel"
+                }
+            };
+
+            string sensorConfigTopic = $"homeassistant/sensor/{deviceId}/config";
+            string sensorConfigPayload = JsonConvert.SerializeObject(sensorConfig);
+            await mqttClientWrapper.PublishAsync(sensorConfigTopic, sensorConfigPayload);
+        }
+
 
 
 

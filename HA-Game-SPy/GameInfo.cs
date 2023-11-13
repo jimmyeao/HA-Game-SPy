@@ -8,10 +8,9 @@ namespace HA_Game_Spy
 {
     public class GameInfo
     {
-        public string Name { get; set; }
+        public string GameName { get; set; }
         public string ExecutableName { get; set; }
-        // Add other properties as needed
-        public string PathToLogo { get; set; }
+        public string LogoUrl { get; set; }
     }
 }
 
