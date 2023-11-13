@@ -9,7 +9,7 @@ namespace HA_Game_Spy
     {
         private IMqttClient _mqttClient;
         private MqttClientOptions _mqttOptions;
-
+        public bool IsConnected => _mqttClient.IsConnected;
         public MqttClientWrapper(string clientId, string mqttBroker, string username, string password)
         {
             var factory = new MqttFactory();
@@ -44,6 +44,13 @@ namespace HA_Game_Spy
                 .Build();
 
             await _mqttClient.PublishAsync(message);
+        }
+        public async Task DisconnectAsync()
+        {
+            if (_mqttClient.IsConnected)
+            {
+                await _mqttClient.DisconnectAsync();
+            }
         }
 
         // Additional methods as needed

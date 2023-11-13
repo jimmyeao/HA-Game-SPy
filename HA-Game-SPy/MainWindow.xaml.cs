@@ -1,4 +1,5 @@
-﻿using Newtonsoft.Json;
+﻿using HA_Game_Spy;
+using Newtonsoft.Json;
 using System;
 using System.IO;
 using System.Linq;
@@ -14,6 +15,7 @@ namespace HA_Game_SPy
     {
         private bool isDarkTheme = false;
         private Settings settings;
+        private MqttClientWrapper mqttClientWrapper;
 
         public MainWindow()
         {
@@ -28,8 +30,41 @@ namespace HA_Game_SPy
             Loaded += async (sender, args) =>
             {
                 settings = await LoadSettingsAsync();
+                if (!string.IsNullOrEmpty(settings.MqttAddress))
+                {
+                    mqttClientWrapper = new MqttClientWrapper(
+                        "HAGameSpy",
+                        settings.MqttAddress,
+                        settings.MqttUsername,
+                        settings.EncryptedMqttPassword);
 
+                    try
+                    {
+                        await mqttClientWrapper.ConnectAsync();
+                        if (mqttClientWrapper != null && mqttClientWrapper.IsConnected)
+                        {
+                            mqttStatusText.Text = "MQTT Status: Connected";
+                        }
+                        else
+                        {
+                            mqttStatusText.Text = "MQTT Status: Disconnected";
+                        }
+                    }
+                    catch
+                    {
+                        // Optionally handle connection failure on startup
+                    }
+                }
                 // Additional initialization using settings if needed
+            };
+
+            Closing += async (sender, args) =>
+            {
+                if (mqttClientWrapper != null)
+                {
+                    await mqttClientWrapper.DisconnectAsync();
+                }
+                await SaveSettingsAsync(settings);
             };
         }
 
@@ -145,5 +180,40 @@ namespace HA_Game_SPy
 
             return settings;
         }
+
+        private async void btnConnectMqtt_Click(object sender, RoutedEventArgs e)
+        {
+            if (mqttClientWrapper != null && mqttClientWrapper.IsConnected)
+            {
+                MessageBox.Show("Already connected to MQTT server.", "Info", MessageBoxButton.OK, MessageBoxImage.Information);
+                return;
+            }
+
+            try
+            {
+                mqttClientWrapper = new MqttClientWrapper(
+                    "HAGameSpy",
+                    settings.MqttAddress,
+                    settings.MqttUsername,
+                    settings.EncryptedMqttPassword);
+
+                await mqttClientWrapper.ConnectAsync();
+                MessageBox.Show("Connected to MQTT server successfully.", "Success", MessageBoxButton.OK, MessageBoxImage.Information);
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Failed to connect to MQTT server: {ex.Message}", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+            }
+            if (mqttClientWrapper != null && mqttClientWrapper.IsConnected)
+            {
+                mqttStatusText.Text = "MQTT Status: Connected";
+            }
+            else
+            {
+                mqttStatusText.Text = "MQTT Status: Disconnected";
+            }
+        }
+
+
     }
 }
