@@ -63,7 +63,7 @@
         <CheckBox Grid.Row="12" x:Name="chkStartWithWindows" Content="Start with Windows" />
         <CheckBox Grid.Row="13" x:Name="chkStartMinimized" Content="Start Minimized" Checked="chkStartMinimized_Checked"/>
         <Button Content="Toggle Theme" Click="ToggleThemeButton_Click"
-                        Style="{DynamicResource MaterialDesignRaisedButton}" Margin="324,5,324,-15" Width="131" Grid.Row="13" />
+                        Style="{DynamicResource MaterialDesignRaisedButton}" Margin="309,7,315,-13" Width="Auto" Grid.Row="13" />
         <ToolBar Grid.Row="13" Margin="0,42,0,-42" Style="{DynamicResource MaterialDesignToolBar}">
            <TextBlock x:Name="mqttStatusText" Text="MQTT Status: Disconnected" Style = "{DynamicResource MaterialDesignTextBlock}"/>
            <TextBlock x:Name="homeAssistantStatusText" Text="Home Assistant Status: Disconnected" Style = "{DynamicResource MaterialDesignTextBlock}" Margin="10,0,0,0" />

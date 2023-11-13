@@ -1,6 +1,7 @@
 ﻿using HA_Game_Spy;
 using Newtonsoft.Json;
 using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Security.Cryptography;
@@ -16,6 +17,7 @@ namespace HA_Game_SPy
         private bool isDarkTheme = false;
         private Settings settings;
         private MqttClientWrapper mqttClientWrapper;
+        private List<GameInfo> games;
 
         public MainWindow()
         {
@@ -29,6 +31,7 @@ namespace HA_Game_SPy
             settings = new Settings();
             Loaded += async (sender, args) =>
             {
+                games = await LoadGamesAsync();
                 settings = await LoadSettingsAsync();
                 if (!string.IsNullOrEmpty(settings.MqttAddress))
                 {
@@ -213,6 +216,20 @@ namespace HA_Game_SPy
                 mqttStatusText.Text = "MQTT Status: Disconnected";
             }
         }
+        private async Task<List<GameInfo>> LoadGamesAsync()
+        {
+            string localFolder = Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData);
+            string gamesFilePath = Path.Combine(localFolder, "games.json");
+
+            if (File.Exists(gamesFilePath))
+            {
+                string json = await File.ReadAllTextAsync(gamesFilePath);
+                return JsonConvert.DeserializeObject<List<GameInfo>>(json);
+            }
+
+            return new List<GameInfo>(); // Return an empty list if file doesn't exist
+        }
+
 
 
     }

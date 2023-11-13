@@ -1,0 +1,13 @@
+[
+  {
+    "gameName": "MQTT Explorer",
+    "executableName": "MQTT Explored.exe",
+    "logoUrl": "https://user-images.githubusercontent.com/7721625/52227945-5280b580-28b1-11e9-804c-75a842537393.png"
+  },
+  {
+    "gameName": "Example Game 2",
+    "executableName": "ExampleGame2.exe",
+    "logoUrl": "http://example.com/logo2.png"
+  }
+  // ... more games
+]
