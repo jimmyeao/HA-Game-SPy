@@ -7,12 +7,17 @@
   {
     "gameName": "Discord",
     "executableName": "Discord.exe",
-    "logoUrl": "https://i.pinimg.com/originals/5b/d3/76/5bd376d4098adbe81e5f5f0eb6d2f766.png"
+    "logoUrl": "https://assets-global.website-files.com/6257adef93867e50d84d30e2/636e0b52aa9e99b832574a53_full_logo_blurple_RGB.png"
   },
   {
     "gameName": "Elite Dangerous",
     "executableName": "EdLaunch.exe",
     "logoUrl": "https://banner2.cleanpng.com/20180429/rsq/kisspng-elite-dangerous-video-game-twitch-youtube-5ae656dcb983c4.8593632615250449567599.jpg"
+  },
+  {
+    "gameName": "PayDay 3",
+    "executableName": "PAYDAY3Client-WinGDK-Shipping.exe",
+    "logoUrl": "https://i.redd.it/8ick65bxlkk51.png"
   }
   // ... more games
 ]
