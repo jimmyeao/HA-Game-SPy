@@ -6,24 +6,27 @@
     <RootNamespace>HA_Game_SPy</RootNamespace>
     <Nullable>enable</Nullable>
     <UseWPF>true</UseWPF>
-    <AssemblyVersion>1.0.0.35</AssemblyVersion>
-    <FileVersion>1.0.0.35</FileVersion>
-    <ApplicationIcon>download.ico</ApplicationIcon>
+    <AssemblyVersion>1.0.0.50</AssemblyVersion>
+    <FileVersion>1.0.0.50</FileVersion>
+    <ApplicationIcon>trans.ico</ApplicationIcon>
     <PackageIcon>download.png</PackageIcon>
   </PropertyGroup>
 
   <ItemGroup>
-    <Content Include="download.ico" />
+    <Content Include="trans.ico">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
   </ItemGroup>
 
   <ItemGroup>
-    <None Include="..\..\HA Teams Status\download.png">
+    <None Include="..\download.png">
       <Pack>True</Pack>
       <PackagePath>\</PackagePath>
     </None>
   </ItemGroup>
 
   <ItemGroup>
+    <PackageReference Include="Hardcodet.NotifyIcon.Wpf" Version="1.1.0" />
     <PackageReference Include="MaterialDesignThemes" Version="4.9.0" />
     <PackageReference Include="MQTTnet" Version="4.3.1.873" />
     <PackageReference Include="MQTTnet.Extensions.ManagedClient" Version="4.3.1.873" />

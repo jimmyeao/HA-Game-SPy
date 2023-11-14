@@ -1,7 +1,9 @@
 ﻿using HA_Game_Spy;
+using Hardcodet.Wpf.TaskbarNotification;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
@@ -9,6 +11,7 @@ using System.Security.Cryptography;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
+
 
 namespace HA_Game_SPy
 {
@@ -20,11 +23,14 @@ namespace HA_Game_SPy
         private List<GameInfo> games;
         private string currentDetectedGame = "";
         private string deviceId;
+        
         public MainWindow()
         {
             InitializeComponent();
+            string iconPath = System.IO.Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "trans.ico");
+            MyNotifyIcon.Icon = new System.Drawing.Icon(iconPath);
             deviceId = Environment.MachineName; // Or generate a unique ID
-
+          
             if (Properties.Settings.Default.UpdateSettings)
             {
                 Properties.Settings.Default.Upgrade();
@@ -126,6 +132,43 @@ namespace HA_Game_SPy
             string json = JsonConvert.SerializeObject(settings);
             await File.WriteAllTextAsync(settingsFilePath, json);
         }
+        private void MenuItem_Exit_Click(object sender, RoutedEventArgs e)
+        {
+            Close();
+        }
+        protected override void OnStateChanged(EventArgs e)
+        {
+            if (WindowState == WindowState.Minimized)
+            {
+                Hide();
+                MyNotifyIcon.Visibility = Visibility.Visible; // Ensure the NotifyIcon is visible
+
+                // Corrected ShowBalloonTip usage
+                MyNotifyIcon.ShowBalloonTip("Application Minimized", "Your application is still running in the background.", BalloonIcon.Info);
+            }
+            else
+            {
+                MyNotifyIcon.Visibility = Visibility.Collapsed; // Optionally hide the icon when the window is normal/maximized
+            }
+
+            base.OnStateChanged(e);
+        }
+        private void MyNotifyIcon_Click(object sender, EventArgs e)
+        {
+            Show();
+            WindowState = WindowState.Normal;
+            MyNotifyIcon.Visibility = Visibility.Collapsed;
+        }
+
+
+
+        protected override void OnClosing(CancelEventArgs e)
+        {
+            MyNotifyIcon.Dispose(); // Clean up the icon
+            base.OnClosing(e);
+        }
+
+
 
         private void ToggleThemeButton_Click(object sender, RoutedEventArgs e)
         {
@@ -285,8 +328,17 @@ namespace HA_Game_SPy
                 else if (!string.IsNullOrEmpty(currentDetectedGame))
                 {
                     currentDetectedGame = "";
-                    var noGame = new GameInfo { GameName = "None", LogoUrl = "" };
-                    UpdateUIAndPublishGame(noGame); // Pass a GameInfo object for "None"
+                    if (settings.IdleImage != "")
+                    {
+                        var noGame = new GameInfo { GameName = "None", LogoUrl = settings.IdleImage };
+                        UpdateUIAndPublishGame(noGame);
+                    }
+                    else
+                    {
+                        //                    }}
+                        var noGame = new GameInfo { GameName = "None", LogoUrl = "" };
+                        UpdateUIAndPublishGame(noGame); // Pass a GameInfo object for "None"
+                    }
                 }
 
                 await Task.Delay(5000); // Check every 5 seconds
