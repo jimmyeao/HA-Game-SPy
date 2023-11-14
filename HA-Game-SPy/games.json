@@ -1,23 +1,27 @@
 [
   {
-    "gameName": "MQTT Explorer",
-    "executableName": "MQTT Explorer.exe",
-    "logoUrl": "https://user-images.githubusercontent.com/7721625/52227945-5280b580-28b1-11e9-804c-75a842537393.png"
+    "GameName": "Discord",
+    "ExecutableName": "Discord.exe",
+    "LogoUrl": "https://assets-global.website-files.com/6257adef93867e50d84d30e2/636e0b52aa9e99b832574a53_full_logo_blurple_RGB.png"
   },
   {
-    "gameName": "Discord",
-    "executableName": "Discord.exe",
-    "logoUrl": "https://assets-global.website-files.com/6257adef93867e50d84d30e2/636e0b52aa9e99b832574a53_full_logo_blurple_RGB.png"
+    "GameName": "Elite Dangerous",
+    "ExecutableName": "EdLaunch.exe",
+    "LogoUrl": "https://banner2.cleanpng.com/20180429/rsq/kisspng-elite-dangerous-video-game-twitch-youtube-5ae656dcb983c4.8593632615250449567599.jpg"
   },
   {
-    "gameName": "Elite Dangerous",
-    "executableName": "EdLaunch.exe",
-    "logoUrl": "https://banner2.cleanpng.com/20180429/rsq/kisspng-elite-dangerous-video-game-twitch-youtube-5ae656dcb983c4.8593632615250449567599.jpg"
+    "GameName": "PayDay 3",
+    "ExecutableName": "PAYDAY3Client-WinGDK-Shipping.exe",
+    "LogoUrl": "https://i.redd.it/8ick65bxlkk51.png"
   },
   {
-    "gameName": "PayDay 3",
-    "executableName": "PAYDAY3Client-WinGDK-Shipping.exe",
-    "logoUrl": "https://i.redd.it/8ick65bxlkk51.png"
+    "GameName": "Assetto Corsa",
+    "ExecutableName": "AssettoCorsa.exe",
+    "LogoUrl": "https://www.racedepartment.com/attachments/1-png.107088/"
+  },
+  {
+    "GameName": "Disney Speed Storm",
+    "ExecutableName": "Disney_Speedstorm_x64_rtl.exe",
+    "LogoUrl": "https://www.google.com/url?sa=i&url=https%3A%2F%2Fwww.bluestacks.com%2Fvi%2Fblog%2Fgames%2Fdisney-speedstorm.html&psig=AOvVaw2i8UUvcAeWhgUMqgV0lTom&ust=1700057207469000&source=images&cd=vfe&opi=89978449&ved=0CBIQjRxqFwoTCOCJqN7Uw4IDFQAAAAAdAAAAABAE"
   }
-  // ... more games
 ]

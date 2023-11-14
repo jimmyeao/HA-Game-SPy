@@ -71,6 +71,33 @@ namespace HA_Game_SPy
 
             Closing += async (sender, args) =>
             {
+                //send an empty state
+                if (mqttClientWrapper != null && mqttClientWrapper.IsConnected)
+                {
+                    string stateTopic = $"HAGameSpy/{deviceId}/state";
+                    string attributesTopic = $"HAGameSpy/{deviceId}/attributes";
+                    var attributes = new { gamename = "None", gamelogourl = settings.IdleImage };
+                    string attributesPayload = JsonConvert.SerializeObject(attributes);
+                    if (settings.IdleImage != "")
+                    {
+                         attributes = new { gamename = "None", gamelogourl = settings.IdleImage };
+                         attributesPayload = JsonConvert.SerializeObject(attributes);
+
+                        await mqttClientWrapper.PublishAsync(stateTopic, "None");
+                        await mqttClientWrapper.PublishAsync(attributesTopic, attributesPayload);
+                    }
+                    else
+                    {
+                         attributes = new { gamename = "None", gamelogourl = "https://i.gifer.com/4ZOQ.gif" };
+                         attributesPayload = JsonConvert.SerializeObject(attributes);
+
+                        await mqttClientWrapper.PublishAsync(stateTopic, "None");
+                        await mqttClientWrapper.PublishAsync(attributesTopic, attributesPayload);
+                    }   
+
+
+                }
+                //check if mqtt is connected and disconnect
                 if (mqttClientWrapper != null)
                 {
                     await mqttClientWrapper.DisconnectAsync();
@@ -95,7 +122,7 @@ namespace HA_Game_SPy
             settings.Theme = isDarkTheme ? "Dark" : "Light";
             settings.MqttAddress = txtMqttAddress.Text;
             settings.MqttUsername = txtMqttUsername.Text;
-
+            settings.IdleImage = txtIdleImageUrl.Text;
             string json = JsonConvert.SerializeObject(settings);
             await File.WriteAllTextAsync(settingsFilePath, json);
         }
@@ -174,7 +201,7 @@ namespace HA_Game_SPy
                 chkStartMinimized.IsChecked = settings.StartMinimized;
                 chkStartWithWindows.IsChecked = settings.StartWithWindows;
                 txtMqttUsername.Text = settings.MqttUsername;
-
+                txtIdleImageUrl.Text = settings.IdleImage;
                 txtMqttAddress.Text = settings.MqttAddress;
                 if (settings.Theme == "Dark")
                 {
@@ -280,12 +307,13 @@ namespace HA_Game_SPy
             string stateTopic = $"HAGameSpy/{deviceId}/state";
             string attributesTopic = $"HAGameSpy/{deviceId}/attributes";
 
-            var attributes = new { gamename = game.GameName, gamelogourl = game.LogoUrl };
+            var attributes = new { gamename = game.GameName, gamelogourl = game.LogoUrl, device_id = deviceId };
             string attributesPayload = JsonConvert.SerializeObject(attributes);
 
-            _ =mqttClientWrapper.PublishAsync(stateTopic, game.GameName); // Publish game name as state
-            _ = mqttClientWrapper.PublishAsync(attributesTopic, attributesPayload); // Publish attributes
+            _ = mqttClientWrapper.PublishAsync(stateTopic, game.GameName); // Publish game name as state
+            _ = mqttClientWrapper.PublishAsync(attributesTopic, attributesPayload); // Publish attributes including device_id
         }
+
 
         private async Task PublishSensorConfiguration()
         {
@@ -299,9 +327,11 @@ namespace HA_Game_SPy
                 {
                     identifiers = new string[] { $"hagamespy_{deviceId}" },
                     name = "HAGameSpy",
-                    manufacturer = "YourManufacturer",
-                    model = "YourModel"
-                }
+                    manufacturer = "Jimmy White",
+                    model = "0.0.1"
+                },
+                device_id = deviceId // Custom attribute for device ID
+
             };
 
             string sensorConfigTopic = $"homeassistant/sensor/{deviceId}/config";
@@ -309,8 +339,16 @@ namespace HA_Game_SPy
             await mqttClientWrapper.PublishAsync(sensorConfigTopic, sensorConfigPayload);
         }
 
+        private void AddGame_Click(object sender, RoutedEventArgs e)
+        {
+            GameAddWindow gameAddWindow = new GameAddWindow();
+            gameAddWindow.ShowDialog();
+        }
 
-
-
+        private void ListGame_Click(object sender, RoutedEventArgs e)
+        {
+            GameListWindow gameListWindow = new GameListWindow();
+            gameListWindow.ShowDialog();
+        }
     }
 }

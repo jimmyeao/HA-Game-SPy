@@ -1,7 +1,8 @@
-﻿<Window x:Class="HA_Game_SPy.MainWindow"
+﻿<Window
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
+        xmlns:av="http://schemas.microsoft.com/expression/blend/2008" xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" mc:Ignorable="av" x:Class="HA_Game_SPy.MainWindow"
         Title="HA Game Spy" Height="450" Width="800"
             TextElement.Foreground="{DynamicResource MaterialDesignBody}"
     TextElement.FontWeight="Regular"
@@ -23,7 +24,7 @@
 
         </ResourceDictionary>
     </Window.Resources>
-    <Grid Margin="10">
+    <Grid Margin="10,10,229,10">
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="Auto"/>
@@ -39,6 +40,10 @@
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <!-- Add this for the new idle image URL field -->
+            <RowDefinition Height="Auto"/>
+            <!-- Adjust other rows as needed -->
         </Grid.RowDefinitions>
 
         <Label Grid.Row="0" Content="Home Assistant URL"/>
@@ -60,14 +65,22 @@
 
         <Button Grid.Row="11" x:Name="btnConnectMqtt" Content="Connect to MQTT" Style="{DynamicResource MaterialDesignRaisedButton}" Click="btnConnectMqtt_Click"/>
 
-        <CheckBox Grid.Row="12" x:Name="chkStartWithWindows" Content="Start with Windows" />
-        <CheckBox Grid.Row="13" x:Name="chkStartMinimized" Content="Start Minimized" Checked="chkStartMinimized_Checked"/>
+
+        <Label Grid.Row="14" Content="Idle Image URL"/>
+        <TextBox Grid.Row="15" x:Name="txtIdleImageUrl" Style="{DynamicResource MaterialDesignTextBox}"/>
+        <CheckBox Grid.Row="2" x:Name="chkStartWithWindows" Content="Start with Windows" Margin="595,0,-205,20" Grid.RowSpan="2" />
+        <CheckBox Grid.Row="3" x:Name="chkStartMinimized" Content="Start Minimized" Checked="chkStartMinimized_Checked" Margin="595,6,-205,25" Grid.RowSpan="2"/>
         <Button Content="Toggle Theme" Click="ToggleThemeButton_Click"
-                        Style="{DynamicResource MaterialDesignRaisedButton}" Margin="309,7,315,-13" Width="Auto" Grid.Row="13" />
-        <ToolBar Grid.Row="13" Margin="0,42,0,-42" Style="{DynamicResource MaterialDesignToolBar}">
-           <TextBlock x:Name="mqttStatusText" Text="MQTT Status: Disconnected" Style = "{DynamicResource MaterialDesignTextBlock}"/>
-           <TextBlock x:Name="homeAssistantStatusText" Text="Home Assistant Status: Disconnected" Style = "{DynamicResource MaterialDesignTextBlock}" Margin="10,0,0,0" />
-           <TextBlock x:Name="detectedGameText" Text="Detected Game: None" Style = "{DynamicResource MaterialDesignTextBlock}" Margin="10,0,0,0" />
+        Style="{DynamicResource MaterialDesignRaisedButton}" Margin="595,-5,-205,19" Width="Auto" Grid.RowSpan="2" />
+        <Button Content="Add Game" Click="AddGame_Click"
+        Style="{DynamicResource MaterialDesignRaisedButton}"  Width="Auto" Grid.RowSpan="3" Margin="595,27,-205,19" Grid.Row="4" />
+        <ToolBar Grid.Row="16" Margin="0,42,0,-42" Style="{DynamicResource MaterialDesignToolBar}">
+
+            <TextBlock x:Name="mqttStatusText" Text="MQTT Status: Disconnected" Style = "{DynamicResource MaterialDesignTextBlock}"/>
+            <TextBlock x:Name="homeAssistantStatusText" Text="Home Assistant Status: Disconnected" Style = "{DynamicResource MaterialDesignTextBlock}" Margin="10,0,0,0" />
+            <TextBlock x:Name="detectedGameText" Text="Detected Game: None" Style = "{DynamicResource MaterialDesignTextBlock}" Margin="10,0,0,0" />
         </ToolBar>
+        <Button Content="List Games" Click="ListGame_Click"
+            Style="{DynamicResource MaterialDesignRaisedButton}"  Width="Auto" Grid.RowSpan="2" Margin="595,0,-205,14" Grid.Row="7" />
     </Grid>
 </Window>

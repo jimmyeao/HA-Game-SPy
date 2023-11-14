@@ -6,7 +6,22 @@
     <RootNamespace>HA_Game_SPy</RootNamespace>
     <Nullable>enable</Nullable>
     <UseWPF>true</UseWPF>
+    <AssemblyVersion>1.0.0.35</AssemblyVersion>
+    <FileVersion>1.0.0.35</FileVersion>
+    <ApplicationIcon>download.ico</ApplicationIcon>
+    <PackageIcon>download.png</PackageIcon>
   </PropertyGroup>
+
+  <ItemGroup>
+    <Content Include="download.ico" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Include="..\..\HA Teams Status\download.png">
+      <Pack>True</Pack>
+      <PackagePath>\</PackagePath>
+    </None>
+  </ItemGroup>
 
   <ItemGroup>
     <PackageReference Include="MaterialDesignThemes" Version="4.9.0" />
@@ -25,6 +40,9 @@
 
   <ItemGroup>
     <None Update="games.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="logo.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
     <None Update="Properties\Settings.settings">

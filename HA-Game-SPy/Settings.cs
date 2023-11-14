@@ -18,6 +18,8 @@ namespace HA_Game_SPy
         public string Theme { get; set; }
 
         public bool UpdateSettings { get; set; }
+        public string IdleImage { get; set; }
+
     }
 
 }
