@@ -10,6 +10,7 @@ using System.Linq;
 using System.Security.Cryptography;
 using System.Text;
 using System.Threading.Tasks;
+using Microsoft.Win32;
 using System.Windows;
 
 
@@ -42,6 +43,13 @@ namespace HA_Game_SPy
             {
                 games = await LoadGamesAsync();
                 settings = await LoadSettingsAsync();
+                if (settings.StartMinimized)
+                {
+                    WindowState = WindowState.Minimized;
+                    Hide();  // Optional: Ensure the window is hidden if starting minimized
+                    MyNotifyIcon.Visibility = Visibility.Visible; // Show the NotifyIcon in system tray
+                }
+                
                 if (!string.IsNullOrEmpty(settings.MqttAddress))
                 {
                     mqttClientWrapper = new MqttClientWrapper(
@@ -108,6 +116,7 @@ namespace HA_Game_SPy
                 {
                     await mqttClientWrapper.DisconnectAsync();
                 }
+                SetStartup(settings.StartWithWindows);
                 await SaveSettingsAsync(settings);
             };
         }
@@ -135,6 +144,22 @@ namespace HA_Game_SPy
         private void MenuItem_Exit_Click(object sender, RoutedEventArgs e)
         {
             Close();
+        }
+        private void SetStartup(bool startWithWindows)
+        {
+            const string appName = "HA_Game_Spy"; // Your application's name
+            string exePath = System.Windows.Forms.Application.ExecutablePath;
+
+            RegistryKey key = Registry.CurrentUser.OpenSubKey(@"SOFTWARE\Microsoft\Windows\CurrentVersion\Run", true);
+
+            if (startWithWindows)
+            {
+                key.SetValue(appName, exePath);
+            }
+            else
+            {
+                key.DeleteValue(appName, false);
+            }
         }
         protected override void OnStateChanged(EventArgs e)
         {
