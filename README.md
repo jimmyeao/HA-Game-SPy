@@ -22,17 +22,17 @@ If anyone has a good list of game names and their exe names, please creata PR fo
 
 Main Window:
 
-<img src="https://github.com/jimmyeao/HA-Game-SPy/assets/5197831/c91afd10-8699-463b-a10f-2e5b75820625" width="600" height="300">
+<img src="https://github.com/jimmyeao/HA-Game-SPy/assets/5197831/c91afd10-8699-463b-a10f-2e5b75820625" width="600" >
 
 Add Game:
 
-<img src="https://github.com/jimmyeao/HA-Game-SPy/assets/5197831/b3d2c25e-0fdb-4cde-ad1f-5e3b81cd09e3" width="600" height="300">
+<img src="https://github.com/jimmyeao/HA-Game-SPy/assets/5197831/b3d2c25e-0fdb-4cde-ad1f-5e3b81cd09e3" width="600" >
 
 You can use the browse button to find the executable for your game, fill in the name, and the image url can either be a source on the internet, or hosted local on your homeassistant (Assuming you have an image in /config/www/images/ your url would be /local/images/yourimage.png)
 
 List Games:
 
-<img src="https://github.com/jimmyeao/HA-Game-SPy/assets/5197831/513a972c-b9dd-4a09-8ad1-0b657ee80283" width="600" height="300">
+<img src="https://github.com/jimmyeao/HA-Game-SPy/assets/5197831/513a972c-b9dd-4a09-8ad1-0b657ee80283" width="600" >
 
 you can edit and remove/add games in the list view too
 
