@@ -116,7 +116,7 @@ namespace HA_Game_SPy
                 {
                     await mqttClientWrapper.DisconnectAsync();
                 }
-                SetStartup(settings.StartWithWindows);
+                await SetStartupAsync(settings.StartWithWindows);
                 await SaveSettingsAsync(settings);
             };
         }
@@ -145,22 +145,27 @@ namespace HA_Game_SPy
         {
             Close();
         }
-        private void SetStartup(bool startWithWindows)
+        private async Task SetStartupAsync(bool startWithWindows)
         {
-            const string appName = "HA_Game_Spy"; // Your application's name
-            string exePath = System.Windows.Forms.Application.ExecutablePath;
-
-            RegistryKey key = Registry.CurrentUser.OpenSubKey(@"SOFTWARE\Microsoft\Windows\CurrentVersion\Run", true);
-
-            if (startWithWindows)
+            await Task.Run(() =>
             {
-                key.SetValue(appName, exePath);
-            }
-            else
-            {
-                key.DeleteValue(appName, false);
-            }
+                const string appName = "HA_Game_Spy"; // Your application's name
+                string exePath = System.Windows.Forms.Application.ExecutablePath;
+
+                using (RegistryKey key = Registry.CurrentUser.OpenSubKey(@"SOFTWARE\Microsoft\Windows\CurrentVersion\Run", true))
+                {
+                    if (startWithWindows)
+                    {
+                        key.SetValue(appName, exePath);
+                    }
+                    else
+                    {
+                        key.DeleteValue(appName, false);
+                    }
+                }
+            });
         }
+
         protected override void OnStateChanged(EventArgs e)
         {
             if (WindowState == WindowState.Minimized)
