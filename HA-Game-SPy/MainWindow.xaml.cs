@@ -12,7 +12,9 @@ using System.Security.Cryptography;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
+using System.Windows.Controls;
 using System.Windows.Media.Imaging;
+using XamlAnimatedGif;
 
 namespace HA_Game_SPy
 {
@@ -87,6 +89,7 @@ namespace HA_Game_SPy
                         {
                             mqttStatusText.Text = "MQTT Status: Connected";
                             await PublishSensorConfiguration();
+                           
                         }
                         else
                         {
@@ -347,16 +350,7 @@ namespace HA_Game_SPy
                 // Deserialize the JSON string into a Settings object
                 settings = JsonConvert.DeserializeObject<Settings>(json);
                 // Set the Home Assistant URL text box value
-                txtHAUrl.Text = settings.HomeAssistantUrl;
-                // Check if the encrypted Home Assistant token exists
-                if (settings.EncryptedHAToken != null)
-                {
-                    // Decrypt the encrypted Home Assistant token and set the HAToken text box value
-                    txtHAToken.Text = Encoding.UTF8.GetString(ProtectedData.Unprotect(
-                        Convert.FromBase64String(settings.EncryptedHAToken),
-                        null,
-                        DataProtectionScope.CurrentUser));
-                }
+               
 
                 // Check if the encrypted MQTT password exists
                 if (settings.EncryptedMqttPassword != null)
@@ -464,11 +458,7 @@ namespace HA_Game_SPy
 
             // Update the HomeAssistantUrl property of the settings object with the value from the
             // txtHAUrl TextBox
-            settings.HomeAssistantUrl = txtHAUrl.Text;
-
-            // Encrypt the HAToken value from the txtHAToken TextBox and assign it to the
-            // EncryptedHAToken property of the settings object
-            settings.EncryptedHAToken = Convert.ToBase64String(ProtectedData.Protect(Encoding.UTF8.GetBytes(txtHAToken.Text), null, DataProtectionScope.CurrentUser));
+           
 
             // Encrypt the MqttPassword value from the txtMqttPassword PasswordBox and assign it to
             // the EncryptedMqttPassword property of the settings object
@@ -584,13 +574,14 @@ namespace HA_Game_SPy
         // Method to update the UI and publish game information
         private void UpdateUIAndPublishGame(GameInfo game)
         {
-            Dispatcher.Invoke(() =>
+            Dispatcher.Invoke(async () =>
             {
                 detectedGameText.Text = $"Detected Game: {game.GameName}";
 
                 try
                 {
-                    if (!string.IsNullOrWhiteSpace(game.LogoUrl) && Uri.IsWellFormedUriString(game.LogoUrl, UriKind.Absolute))
+                    var uri = new Uri(game.LogoUrl, UriKind.Absolute);
+                    if (uri.AbsolutePath.EndsWith(".gif", StringComparison.OrdinalIgnoreCase))
                     {
                         BitmapImage bitmap = new BitmapImage();
                         bitmap.BeginInit();
@@ -598,19 +589,28 @@ namespace HA_Game_SPy
                         bitmap.CacheOption = BitmapCacheOption.OnLoad;
                         bitmap.EndInit();
                         gamePic.Source = bitmap;
+                        gamePic.Visibility = Visibility.Visible;
+                        // Use XamlAnimatedGif for animated GIFs
+                        AnimationBehavior.SetSourceUri(gamePic, uri);
                     }
                     else
                     {
-                        gamePic.Source = null; // Reset or set to a default image
+                        // Use standard method for non-GIF images
+                        BitmapImage bitmap = new BitmapImage();
+                        bitmap.BeginInit();
+                        bitmap.UriSource = new Uri(game.LogoUrl, UriKind.Absolute);
+                        bitmap.CacheOption = BitmapCacheOption.OnLoad;
+                        bitmap.EndInit();
+                        gamePic.Source = bitmap;
+                        gamePic.Visibility = Visibility.Visible;
                     }
                 }
                 catch (Exception ex)
                 {
                     Debug.WriteLine($"Error loading image: {ex.Message}");
-                    gamePic.Source = null; // Optionally set to a default image
+                    // Handle error, such as setting a default image
                 }
             });
-
             // Create MQTT topics for state and attributes
             string stateTopic = $"HAGameSpy/{deviceId}/state";
             string attributesTopic = $"HAGameSpy/{deviceId}/attributes";
@@ -624,8 +624,19 @@ namespace HA_Game_SPy
 
             // Publish attributes including device ID
             _ = mqttClientWrapper.PublishAsync(attributesTopic, attributesPayload);
-           
         }
+
+        private void gameMediaElement_MediaEnded(object sender, RoutedEventArgs e)
+        {
+            // Only loop if the source is a GIF
+            if (gameMediaElement.Source != null && gameMediaElement.Source.AbsoluteUri.EndsWith(".gif", StringComparison.OrdinalIgnoreCase))
+            {
+                gameMediaElement.Position = TimeSpan.Zero;
+                gameMediaElement.Play();
+            }
+        }
+
+
 
         #endregion Private Methods
     }
