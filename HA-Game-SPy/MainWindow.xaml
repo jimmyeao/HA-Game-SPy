@@ -26,7 +26,14 @@
 
         </ResourceDictionary>
     </Window.Resources>
-    <Grid Margin="10,10,229,10">
+
+    <Grid Margin="10">
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="550"/>
+            <!-- Content area -->
+            <ColumnDefinition Width="200"/>
+            <!-- Image and buttons area -->
+        </Grid.ColumnDefinitions>
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="Auto"/>
@@ -44,53 +51,51 @@
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="Auto"/>
             <!-- Add this for the new idle image URL field -->
-            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
             <!-- Adjust other rows as needed -->
         </Grid.RowDefinitions>
 
-        <Label Grid.Row="0" Content="Home Assistant URL"/>
-        <TextBox Grid.Row="1" x:Name="txtHAUrl" Style="{DynamicResource MaterialDesignTextBox}"/>
+        <!-- Define your labels, textboxes, and buttons here, setting Grid.Column and Grid.Row accordingly -->
+        <!-- Example for the first few controls -->
+        <Label Grid.Row="0" Grid.Column="0" Content="Home Assistant URL"/>
+        <TextBox Grid.Row="1" Grid.Column="0" x:Name="txtHAUrl" Style="{DynamicResource MaterialDesignTextBox}"/>
 
-        <Label Grid.Row="2" Content="Long Lived Token"/>
-        <TextBox Grid.Row="3" x:Name="txtHAToken" Style="{DynamicResource MaterialDesignTextBox}"/>
+        <!-- ... other controls ... -->
+        <Label Grid.Row="2" Grid.Column="0" Content="Long Lived Token"/>
+        <TextBox Grid.Row="3" Grid.Column="0" x:Name="txtHAToken" Style="{DynamicResource MaterialDesignTextBox}"  />
 
-        <Button Grid.Row="4" x:Name="btnConnectHA" Content="Connect to Home Assistant" Style="{DynamicResource MaterialDesignRaisedButton}"/>
+        <Button Grid.Row="4" Grid.Column="0" x:Name="btnConnectHA" Content="Connect to Home Assistant" Style="{DynamicResource MaterialDesignRaisedButton}" />
 
-        <Label Grid.Row="5" Content="MQTT Address"/>
-        <TextBox Grid.Row="6" x:Name="txtMqttAddress" Style="{DynamicResource MaterialDesignTextBox}"/>
+        <Label Grid.Row="5" Grid.Column="0" Content="MQTT Address" />
+        <TextBox Grid.Row="6" Grid.Column="0" x:Name="txtMqttAddress" Style="{DynamicResource MaterialDesignTextBox}"  />
 
-        <Label Grid.Row="7" Content="MQTT Username"/>
-        <TextBox Grid.Row="8" x:Name="txtMqttUsername" Style="{DynamicResource MaterialDesignTextBox}"/>
+        <Label Grid.Row="7" Grid.Column="0" Content="MQTT Username" />
+        <TextBox Grid.Row="8" Grid.Column="0" x:Name="txtMqttUsername" Style="{DynamicResource MaterialDesignTextBox}" />
 
-        <Label Grid.Row="9" Content="MQTT Password"/>
-        <PasswordBox Grid.Row="10" x:Name="txtMqttPassword" Style="{DynamicResource MaterialDesignPasswordBox}"/>
+        <Label Grid.Row="9" Grid.Column="0" Content="MQTT Password" />
+        <PasswordBox Grid.Row="10" Grid.Column="0" x:Name="txtMqttPassword" Style="{DynamicResource MaterialDesignPasswordBox}" />
 
-        <Button Grid.Row="11" x:Name="btnConnectMqtt" Content="Connect to MQTT" Style="{DynamicResource MaterialDesignRaisedButton}" Click="btnConnectMqtt_Click"/>
+        <Button Grid.Row="11" Grid.Column="0" x:Name="btnConnectMqtt" Content="Connect to MQTT" Style="{DynamicResource MaterialDesignRaisedButton}" Click="btnConnectMqtt_Click" />
+        <Label Grid.Row="12" Grid.Column="0" Content="Idle Image URL"  />
+        <TextBox Grid.Row="13" Grid.Column="0" x:Name="txtIdleImageUrl" Style="{DynamicResource MaterialDesignTextBox}" />
+        <!-- For the Image and buttons on the right -->
+        <Image Grid.Column="1" Grid.Row="11" Grid.RowSpan="5" x:Name="gamePic" Stretch="Uniform" HorizontalAlignment="Left" VerticalAlignment="Top" Height="88" Width="150" Source="/logo.png" Margin="10,0,0,0"/>
 
+        <Button Grid.Column="1" Grid.Row="3" Content="Add Game" Click="AddGame_Click" Style="{DynamicResource MaterialDesignRaisedButton}" Margin="10,0,0,0" />
+        <Button Grid.Column="1" Grid.Row="4" Content="List Games" Click="ListGame_Click" Style="{DynamicResource MaterialDesignRaisedButton}" Margin="10,0,0,0"/>
+        <Button Grid.Column="1" Grid.Row="5" Content="Toggle Theme" Click="ToggleThemeButton_Click" Style="{DynamicResource MaterialDesignRaisedButton}" Margin="10,0,0,0"/>
+        <CheckBox Grid.Column="1" Grid.Row="2" x:Name="chkStartWithWindows" Content="Start with Windows" Margin="10,0,0,0" />
+        <CheckBox Grid.Column="1" Grid.Row="0" x:Name="chkStartMinimized" Content="Start Minimized" Checked="chkStartMinimized_Checked" Margin="10,0,0,0"  />
+        <!-- ... other buttons ... -->
 
-        <Label Grid.Row="14" Content="Idle Image URL"/>
-        <TextBox Grid.Row="15" x:Name="txtIdleImageUrl" Style="{DynamicResource MaterialDesignTextBox}"/>
-        <CheckBox Grid.Row="2" x:Name="chkStartWithWindows" Content="Start with Windows" Margin="595,0,-205,20" Grid.RowSpan="2" />
-        <CheckBox Grid.Row="3" x:Name="chkStartMinimized" Content="Start Minimized" Checked="chkStartMinimized_Checked" Margin="595,6,-205,25" Grid.RowSpan="2"/>
-        <Button Content="Toggle Theme" Click="ToggleThemeButton_Click"
-        Style="{DynamicResource MaterialDesignRaisedButton}" Margin="595,-5,-205,19" Width="Auto" Grid.RowSpan="2" />
-        <Button Content="Add Game" Click="AddGame_Click"
-        Style="{DynamicResource MaterialDesignRaisedButton}"  Width="Auto" Grid.RowSpan="3" Margin="595,27,-205,19" Grid.Row="4" />
-        <ToolBar Grid.Row="16" Margin="0,42,0,-42" Style="{DynamicResource MaterialDesignToolBar}">
-
-            <TextBlock x:Name="mqttStatusText" Text="MQTT Status: Disconnected" Style = "{DynamicResource MaterialDesignTextBlock}"/>
-            <TextBlock x:Name="homeAssistantStatusText" Text="Home Assistant Status: Disconnected" Style = "{DynamicResource MaterialDesignTextBlock}" Margin="10,0,0,0" />
-            <TextBlock x:Name="detectedGameText" Text="Detected Game: None" Style = "{DynamicResource MaterialDesignTextBlock}" Margin="10,0,0,0" />
+        <!-- Toolbar at the bottom -->
+        <ToolBar Grid.Row="15" Grid.ColumnSpan="2" VerticalAlignment="Bottom">
+            <TextBlock x:Name="mqttStatusText" Text="MQTT Status: Disconnected" Style="{DynamicResource MaterialDesignTextBlock}"/>
+            <TextBlock x:Name="homeAssistantStatusText" Text="Home Assistant Status: Disconnected" Style="{DynamicResource MaterialDesignTextBlock}" Margin="10,0,0,0"/>
+            <TextBlock x:Name="detectedGameText" Text="Detected Game: None" Style="{DynamicResource MaterialDesignTextBlock}" Margin="10,0,0,0"/>
         </ToolBar>
-        <Button Content="List Games" Click="ListGame_Click"
-            Style="{DynamicResource MaterialDesignRaisedButton}"  Width="Auto" Grid.RowSpan="2" Margin="595,0,-205,14" Grid.Row="7" />
-        <tb:TaskbarIcon x:Name="MyNotifyIcon"
-                ToolTipText="HAGamesSPy"
-                DoubleClickCommand="{Binding YourCommand}"
-                Visibility="Collapsed"
-                TrayMouseDoubleClick="MyNotifyIcon_Click" />
-
-
+        <tb:TaskbarIcon x:Name="MyNotifyIcon" ToolTipText="HAGamesSPy" Visibility="Collapsed" TrayMouseDoubleClick="MyNotifyIcon_Click"/>
     </Grid>
-   
+
+
 </Window>

@@ -12,6 +12,7 @@ using System.Security.Cryptography;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
+using System.Windows.Media.Imaging;
 
 namespace HA_Game_SPy
 {
@@ -585,11 +586,29 @@ namespace HA_Game_SPy
         {
             Dispatcher.Invoke(() =>
             {
-                // Debug statement to check if this block is executed
-                Debug.WriteLine($"Updating UI for game: {game.GameName}");
-
                 detectedGameText.Text = $"Detected Game: {game.GameName}";
-                // Other UI updates
+
+                try
+                {
+                    if (!string.IsNullOrWhiteSpace(game.LogoUrl) && Uri.IsWellFormedUriString(game.LogoUrl, UriKind.Absolute))
+                    {
+                        BitmapImage bitmap = new BitmapImage();
+                        bitmap.BeginInit();
+                        bitmap.UriSource = new Uri(game.LogoUrl, UriKind.Absolute);
+                        bitmap.CacheOption = BitmapCacheOption.OnLoad;
+                        bitmap.EndInit();
+                        gamePic.Source = bitmap;
+                    }
+                    else
+                    {
+                        gamePic.Source = null; // Reset or set to a default image
+                    }
+                }
+                catch (Exception ex)
+                {
+                    Debug.WriteLine($"Error loading image: {ex.Message}");
+                    gamePic.Source = null; // Optionally set to a default image
+                }
             });
 
             // Create MQTT topics for state and attributes
@@ -605,6 +624,7 @@ namespace HA_Game_SPy
 
             // Publish attributes including device ID
             _ = mqttClientWrapper.PublishAsync(attributesTopic, attributesPayload);
+           
         }
 
         #endregion Private Methods
