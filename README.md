@@ -22,7 +22,8 @@ If anyone has a good list of game names and their exe names, please creata PR fo
 
 Main Window:
 
-<img src="https://github.com/jimmyeao/HA-Game-SPy/assets/5197831/c91afd10-8699-463b-a10f-2e5b75820625" width="600" >
+<img src="https://github.com/jimmyeao/HA-Game-SPy/assets/5197831/ec483760-9159-4346-a8c6-b7ad944b37fe" width="600" >
+
 
 Add Game:
 
