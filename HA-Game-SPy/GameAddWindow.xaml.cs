@@ -4,17 +4,17 @@ using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.IO;
-
 using System.Threading.Tasks;
 using System.Windows;
 
 namespace HA_Game_SPy
 {
-
+    // This class represents a window for adding a new game
     public partial class GameAddWindow : Window
     {
         #region Public Constructors
 
+        // Constructor for the GameAddWindow class
         public GameAddWindow()
         {
             InitializeComponent();
@@ -24,8 +24,10 @@ namespace HA_Game_SPy
 
         #region Private Methods
 
+        // Event handler for the AddGame button click event
         private async void AddGame_Click(object sender, RoutedEventArgs e)
         {
+            // Create a new GameInfo object with the values entered in the text boxes
             var newGame = new GameInfo
             {
                 GameName = txtGameName.Text,
@@ -34,11 +36,12 @@ namespace HA_Game_SPy
             };
 
             var games = await LoadGamesAsync(); // Load existing games
-            games.Add(newGame);
+            games.Add(newGame); // Add the new game to the list
 
-            await SaveGamesAsync(games); // Save updated games list
+            await SaveGamesAsync(games); // Save the updated games list
         }
 
+        // Event handler for the BrowseExecutable button click event
         private void BrowseExecutable_Click(object sender, RoutedEventArgs e)
         {
             OpenFileDialog openFileDialog = new OpenFileDialog();
@@ -48,6 +51,7 @@ namespace HA_Game_SPy
             }
         }
 
+        // Asynchronously load the list of games from a JSON file
         private async Task<List<GameInfo>> LoadGamesAsync()
         {
             string appDirectory = AppDomain.CurrentDomain.BaseDirectory;
@@ -59,9 +63,10 @@ namespace HA_Game_SPy
                 return JsonConvert.DeserializeObject<List<GameInfo>>(json);
             }
 
-            return new List<GameInfo>(); // Return an empty list if file doesn't exist
+            return new List<GameInfo>(); // Return an empty list if the file doesn't exist
         }
 
+        // Asynchronously save the list of games to a JSON file
         private async Task SaveGamesAsync(List<GameInfo> games)
         {
             string appDirectory = AppDomain.CurrentDomain.BaseDirectory;
