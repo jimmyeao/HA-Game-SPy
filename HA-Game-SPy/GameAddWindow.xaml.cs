@@ -8,27 +8,21 @@ using System.IO;
 using System.Threading.Tasks;
 using System.Windows;
 
-
 namespace HA_Game_SPy
 {
-    /// <summary>
-    /// Interaction logic for GameAddWindow.xaml
-    /// </summary>
+
     public partial class GameAddWindow : Window
     {
+        #region Public Constructors
+
         public GameAddWindow()
         {
             InitializeComponent();
         }
-        private void BrowseExecutable_Click(object sender, RoutedEventArgs e)
-        {
-            OpenFileDialog openFileDialog = new OpenFileDialog();
-            if (openFileDialog.ShowDialog() == true)
-            {
-                txtExecutableName.Text = System.IO.Path.GetFileName(openFileDialog.FileName);
-            }
-        }
 
+        #endregion Public Constructors
+
+        #region Private Methods
 
         private async void AddGame_Click(object sender, RoutedEventArgs e)
         {
@@ -43,6 +37,15 @@ namespace HA_Game_SPy
             games.Add(newGame);
 
             await SaveGamesAsync(games); // Save updated games list
+        }
+
+        private void BrowseExecutable_Click(object sender, RoutedEventArgs e)
+        {
+            OpenFileDialog openFileDialog = new OpenFileDialog();
+            if (openFileDialog.ShowDialog() == true)
+            {
+                txtExecutableName.Text = System.IO.Path.GetFileName(openFileDialog.FileName);
+            }
         }
 
         private async Task<List<GameInfo>> LoadGamesAsync()
@@ -68,6 +71,6 @@ namespace HA_Game_SPy
             await File.WriteAllTextAsync(gamesFilePath, json);
         }
 
-
+        #endregion Private Methods
     }
 }

@@ -24,10 +24,17 @@ namespace HA_Game_SPy
         private List<GameInfo> games;
         private string currentDetectedGame = "";
         private string deviceId;
-        
+        private System.Timers.Timer mqttKeepAliveTimer;
+
         public MainWindow()
         {
             InitializeComponent();
+            // Initialize the timer
+            mqttKeepAliveTimer = new System.Timers.Timer(60000); // Set interval to 60 seconds (60000 ms)
+            mqttKeepAliveTimer.Elapsed += OnTimedEvent;
+            mqttKeepAliveTimer.AutoReset = true;
+            mqttKeepAliveTimer.Enabled = true;
+
             string iconPath = System.IO.Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "trans.ico");
             MyNotifyIcon.Icon = new System.Drawing.Icon(iconPath);
             deviceId = Environment.MachineName; // Or generate a unique ID
@@ -120,6 +127,34 @@ namespace HA_Game_SPy
                 await SaveSettingsAsync(settings);
             };
         }
+        private void OnTimedEvent(Object source, System.Timers.ElapsedEventArgs e)
+        {
+            CheckMqttConnection();
+            PublishToMqtt();
+        }
+
+        private async void CheckMqttConnection()
+        {
+            if (mqttClientWrapper != null && !mqttClientWrapper.IsConnected)
+            {
+                try
+                {
+                    await mqttClientWrapper.ConnectAsync();
+                }
+                catch
+                {
+                    // Handle reconnection failure
+                }
+            }
+        }
+        private async void PublishToMqtt()
+        {
+            if (mqttClientWrapper != null && mqttClientWrapper.IsConnected)
+            {
+                // Publish your message
+                await mqttClientWrapper.PublishAsync("your/topic", "Your message");
+            }
+        }
 
         private async Task SaveSettingsAsync(Settings settings)
         {
@@ -194,6 +229,8 @@ namespace HA_Game_SPy
 
         protected override void OnClosing(CancelEventArgs e)
         {
+            mqttKeepAliveTimer?.Stop();
+            mqttKeepAliveTimer?.Dispose();
             MyNotifyIcon.Dispose(); // Clean up the icon
             base.OnClosing(e);
         }
