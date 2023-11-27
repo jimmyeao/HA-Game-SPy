@@ -1,5 +1,7 @@
 # HA-Game-SPy
 
+[![CodeQL](https://github.com/jimmyeao/HA-Game-SPy/actions/workflows/codeql.yml/badge.svg)](https://github.com/jimmyeao/HA-Game-SPy/actions/workflows/codeq.yml)
+
 The purpose of this windows application is watch for certain Games by looking for the windows process. You could use it for any windows process..
 This will create a sensor in MQTT that should be autodiscovered by Homeassistant (At the moment, you will need to be using MQTT, the direct HomeAssistant integration hasnt been written yet!)
 The sensor follows the form sensor.hagamespy_yourcomputername e.g.:
@@ -22,7 +24,8 @@ If anyone has a good list of game names and their exe names, please creata PR fo
 
 Main Window:
 
-<img src="https://github.com/jimmyeao/HA-Game-SPy/assets/5197831/c91afd10-8699-463b-a10f-2e5b75820625" width="600" >
+<img src="https://github.com/jimmyeao/HA-Game-SPy/assets/5197831/ec483760-9159-4346-a8c6-b7ad944b37fe" width="600" >
+
 
 Add Game:
 
