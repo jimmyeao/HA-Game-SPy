@@ -74,6 +74,7 @@ namespace HA_Game_SPy
 
             string json = JsonConvert.SerializeObject(games, Formatting.Indented); // Using Formatting.Indented for readability
             await File.WriteAllTextAsync(gamesFilePath, json);
+            this.Close(); // Close the window after saving
         }
 
         #endregion Private Methods

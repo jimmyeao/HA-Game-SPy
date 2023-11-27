@@ -80,6 +80,7 @@ namespace HA_Game_SPy
 
             string json = JsonConvert.SerializeObject(validGames, Formatting.Indented); // Serialize the valid games into JSON
             await File.WriteAllTextAsync(gamesFilePath, json); // Write the JSON to the file
+            this.Close(); // Close the window after saving
         }
 
 
