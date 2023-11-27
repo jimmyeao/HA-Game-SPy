@@ -209,6 +209,11 @@ namespace HA_Game_SPy
             mqttPublishTimer.AutoReset = true; // Reset the timer after it elapses
             mqttPublishTimer.Enabled = true; // Enable the timer
         }
+        public async Task RefreshGamesListAsync()
+        {
+            games = await LoadGamesAsync();
+        }
+
         private void OnMqttPublishTimerElapsed(object sender, ElapsedEventArgs e)
         {
             if (mqttClientWrapper != null && mqttClientWrapper.IsConnected)
@@ -227,6 +232,7 @@ namespace HA_Game_SPy
 
             // Show the gameAddWindow as a modal dialog
             gameAddWindow.ShowDialog();
+            _ = RefreshGamesListAsync();
         }
 
         //Event handler for the button click event to connect to MQTT server
@@ -340,6 +346,7 @@ namespace HA_Game_SPy
 
             // Show the game list window as a modal dialog
             gameListWindow.ShowDialog();
+            _ = RefreshGamesListAsync();
         }
 
         private async Task<List<GameInfo>> LoadGamesAsync()

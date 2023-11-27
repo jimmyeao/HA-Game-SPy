@@ -56,6 +56,7 @@ namespace HA_Game_SPy
             GameAddWindow addWindow = new GameAddWindow(); // Create a new instance of the GameAddWindow
             addWindow.ShowDialog(); // Show the window as a dialog
             LoadGames(); // Reload the games after adding a new game
+            
         }
 
         // This method is called when the "Save Changes" button is clicked
