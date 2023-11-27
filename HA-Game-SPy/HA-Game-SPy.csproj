@@ -6,10 +6,14 @@
     <RootNamespace>HA_Game_SPy</RootNamespace>
     <Nullable>enable</Nullable>
     <UseWPF>true</UseWPF>
-    <AssemblyVersion>1.0.0.107</AssemblyVersion>
-    <FileVersion>1.0.0.107</FileVersion>
+    <AssemblyVersion>1.1.0.109</AssemblyVersion>
+    <FileVersion>1.1.0.109</FileVersion>
     <ApplicationIcon>trans.ico</ApplicationIcon>
     <PackageIcon>download.png</PackageIcon>
+    <Title>$(AssemblyName)</Title>
+    <PackageProjectUrl>https://github.com/jimmyeao/HA-Game-SPy</PackageProjectUrl>
+    <RepositoryUrl>https://github.com/jimmyeao/HA-Game-SPy</RepositoryUrl>
+    <EnforceCodeStyleInBuild>True</EnforceCodeStyleInBuild>
   </PropertyGroup>
 
 
