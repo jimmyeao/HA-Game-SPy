@@ -6,8 +6,8 @@
     <RootNamespace>HA_Game_SPy</RootNamespace>
     <Nullable>enable</Nullable>
     <UseWPF>true</UseWPF>
-    <AssemblyVersion>1.0.0.99</AssemblyVersion>
-    <FileVersion>1.0.0.99</FileVersion>
+    <AssemblyVersion>1.0.0.104</AssemblyVersion>
+    <FileVersion>1.0.0.104</FileVersion>
     <ApplicationIcon>trans.ico</ApplicationIcon>
     <PackageIcon>download.png</PackageIcon>
   </PropertyGroup>

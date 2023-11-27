@@ -12,6 +12,7 @@ using System.Security.Cryptography;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
+using System.Timers;
 using System.Windows.Controls;
 using System.Windows.Media.Imaging;
 using XamlAnimatedGif;
@@ -29,7 +30,8 @@ namespace HA_Game_SPy
         private MqttClientWrapper mqttClientWrapper;
         private System.Timers.Timer mqttKeepAliveTimer;
         private Settings settings;
-
+        private Timer mqttPublishTimer;
+        private GameInfo currentgame = new GameInfo { GameName = "None", LogoUrl = "" };
         #endregion Private Fields
 
         #region Public Constructors
@@ -57,7 +59,7 @@ namespace HA_Game_SPy
             }
 
             settings = new Settings();
-
+            InitializeMqttPublishTimer();
             Loaded += async (sender, args) =>
             {
                 // Load games and settings asynchronously
@@ -101,7 +103,17 @@ namespace HA_Game_SPy
                         // Optionally handle connection failure on startup
                     }
                 }
-
+                if (!string.IsNullOrWhiteSpace(settings.IdleImage))
+                {
+                    var idleGameInfo = new GameInfo { GameName = "None", LogoUrl = settings.IdleImage };
+                    UpdateUIAndPublishGame(idleGameInfo);
+                    currentgame = idleGameInfo; // Update currentgame to idle game info
+                }
+                else
+                {
+                    // Set to a default image or keep empty
+                    UpdateUIAndPublishGame(new GameInfo { GameName = "None", LogoUrl = "" });
+                }
                 _ = CheckForRunningGamesAsync();
                 // Additional initialization using settings if needed
             };
@@ -190,6 +202,22 @@ namespace HA_Game_SPy
         #endregion Protected Methods
 
         #region Private Methods
+        private void InitializeMqttPublishTimer()
+        {
+            mqttPublishTimer = new Timer(60000); // Set the interval to 60 seconds
+            mqttPublishTimer.Elapsed += OnMqttPublishTimerElapsed;
+            mqttPublishTimer.AutoReset = true; // Reset the timer after it elapses
+            mqttPublishTimer.Enabled = true; // Enable the timer
+        }
+        private void OnMqttPublishTimerElapsed(object sender, ElapsedEventArgs e)
+        {
+            if (mqttClientWrapper != null && mqttClientWrapper.IsConnected)
+            {
+                // Publish your MQTT message here
+                // Example: _ = mqttClientWrapper.PublishAsync("your/topic", "your message");
+                UpdateUIAndPublishGame(currentgame);
+            }
+        }
 
         //This method is called when the AddGame button is clicked
         private void AddGame_Click(object sender, RoutedEventArgs e)
@@ -251,9 +279,10 @@ namespace HA_Game_SPy
                 var detectedGame = games.FirstOrDefault(game => // Find the first game in the list of games that matches a running process
                     runningProcesses.Any(p =>
                         p.ProcessName.Equals(Path.GetFileNameWithoutExtension(game.ExecutableName), StringComparison.OrdinalIgnoreCase)));
-
+                
                 if (detectedGame != null) // If a game is detected
                 {
+                    currentgame = detectedGame;
                     if (currentDetectedGame != detectedGame.GameName) // If the detected game is different from the current detected game
                     {
                         currentDetectedGame = detectedGame.GameName; // Update the current detected game
@@ -265,11 +294,13 @@ namespace HA_Game_SPy
                     currentDetectedGame = ""; // Reset the current detected game
                     if (settings.IdleImage != "") // If there is an idle image specified in the settings
                     {
+                        currentgame = new GameInfo { GameName = "None", LogoUrl = settings.IdleImage };
                         var noGame = new GameInfo { GameName = "None", LogoUrl = settings.IdleImage }; // Create a GameInfo object for "None" with the idle image
                         UpdateUIAndPublishGame(noGame); // Update the UI and publish the "None" game
                     }
                     else // If there is no idle image specified in the settings
                     {
+                        currentgame = new GameInfo { GameName = "None", LogoUrl = settings.IdleImage };
                         var noGame = new GameInfo { GameName = "None", LogoUrl = "" }; // Create a GameInfo object for "None" without a logo URL
                         UpdateUIAndPublishGame(noGame); // Update the UI and publish the "None" game
                     }
@@ -414,7 +445,7 @@ namespace HA_Game_SPy
             CheckMqttConnection();
 
             // Publish the sensor configuration
-            _ = PublishSensorConfiguration();
+            UpdateUIAndPublishGame(currentgame);
         }
 
         // This method is used to publish the sensor configuration to the MQTT broker
