@@ -31,7 +31,7 @@ Add Game:
 
 <img src="https://github.com/jimmyeao/HA-Game-SPy/assets/5197831/b3d2c25e-0fdb-4cde-ad1f-5e3b81cd09e3" width="600" >
 
-You can use the browse button to find the executable for your game, fill in the name, and the image url can either be a source on the internet, or hosted local on your homeassistant (Assuming you have an image in /config/www/images/ your url would be /local/images/yourimage.png)
+You can use the browse button to find the executable for your game, fill in the name, and the image url can either be a source on the internet, or hosted locally on your homeassistant (Assuming you have an image in /config/www/images/ your url would be /local/images/yourimage.png) NOTE if you publish a local (to Home assistant) url, the banner image currently wont display in the app, only in Home Assistant. I may fix this in the future :)
 
 List Games:
 
