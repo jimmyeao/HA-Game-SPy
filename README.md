@@ -1,6 +1,10 @@
 # HA-Game-SPy
 
-[![CodeQL](https://github.com/jimmyeao/HA-Game-SPy/actions/workflows/codeql.yml/badge.svg)](https://github.com/jimmyeao/HA-Game-SPy/actions/workflows/codeq.yml)[![Codespaces Prebuilds](https://github.com/jimmyeao/HA-Game-SPy/actions/workflows/codespaces/create_codespaces_prebuilds/badge.svg)](https://github.com/jimmyeao/HA-Game-SPy/actions/workflows/codespaces/create_codespaces_prebuilds)
+[![CodeQL](https://github.com/jimmyeao/HA-Game-SPy/actions/workflows/codeql.yml/badge.svg)](https://github.com/jimmyeao/HA-Game-SPy/actions/workflows/codeq.yml)[![Codespaces Prebuilds](https://github.com/jimmyeao/HA-Game-SPy/actions/workflows/codespaces/create_codespaces_prebuilds/badge.svg)](https://github.com/jimmyeao/HA-Game-SPy/actions/workflows/codespaces/create_codespaces_prebuilds)[![GitHub tag](https://img.shields.io/github/tag/jimmyeao/HA-Game-SPy?include_prereleases=&sort=semver&color=blue)](https://github.com/jimmyeao/HA-Game-SPy/releases/)
+[![License](https://img.shields.io/badge/License-MIT-blue)](#license)
+[![issues - HA-Game-SPy](https://img.shields.io/github/issues/jimmyeao/HA-Game-SPy)](https://github.com/jimmyeao/HA-Game-SPy/issues)
+
+
 
 The purpose of this windows application is watch for certain Games by looking for the windows process. You could use it for any windows process..
 This will create a sensor in MQTT that should be autodiscovered by Homeassistant (At the moment, you will need to be using MQTT, the direct HomeAssistant integration hasnt been written yet!)
