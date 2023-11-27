@@ -40,9 +40,6 @@ namespace HA_Game_SPy
 
             await SaveGamesAsync(games); // Save the updated games list
                                          // After adding a game
-            
-           
-
         }
 
         // Event handler for the BrowseExecutable button click event
@@ -79,7 +76,6 @@ namespace HA_Game_SPy
             string json = JsonConvert.SerializeObject(games, Formatting.Indented); // Using Formatting.Indented for readability
             await File.WriteAllTextAsync(gamesFilePath, json);
             // After adding a game
-
 
             this.Close(); // Close the window after saving
         }

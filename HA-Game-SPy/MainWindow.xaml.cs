@@ -11,9 +11,8 @@ using System.Linq;
 using System.Security.Cryptography;
 using System.Text;
 using System.Threading.Tasks;
-using System.Windows;
 using System.Timers;
-using System.Windows.Controls;
+using System.Windows;
 using System.Windows.Media.Imaging;
 using XamlAnimatedGif;
 
@@ -24,14 +23,15 @@ namespace HA_Game_SPy
         #region Private Fields
 
         private string currentDetectedGame = "";
+        private GameInfo currentgame = new GameInfo { GameName = "None", LogoUrl = "" };
         private string deviceId;
         private List<GameInfo> games;
         private bool isDarkTheme = false;
         private MqttClientWrapper mqttClientWrapper;
         private System.Timers.Timer mqttKeepAliveTimer;
-        private Settings settings;
         private Timer mqttPublishTimer;
-        private GameInfo currentgame = new GameInfo { GameName = "None", LogoUrl = "" };
+        private Settings settings;
+
         #endregion Private Fields
 
         #region Public Constructors
@@ -91,7 +91,6 @@ namespace HA_Game_SPy
                         {
                             mqttStatusText.Text = "MQTT Status: Connected";
                             await PublishSensorConfiguration();
-                           
                         }
                         else
                         {
@@ -202,26 +201,10 @@ namespace HA_Game_SPy
         #endregion Protected Methods
 
         #region Private Methods
-        private void InitializeMqttPublishTimer()
-        {
-            mqttPublishTimer = new Timer(60000); // Set the interval to 60 seconds
-            mqttPublishTimer.Elapsed += OnMqttPublishTimerElapsed;
-            mqttPublishTimer.AutoReset = true; // Reset the timer after it elapses
-            mqttPublishTimer.Enabled = true; // Enable the timer
-        }
+
         public async Task RefreshGamesListAsync()
         {
             games = await LoadGamesAsync();
-        }
-
-        private void OnMqttPublishTimerElapsed(object sender, ElapsedEventArgs e)
-        {
-            if (mqttClientWrapper != null && mqttClientWrapper.IsConnected)
-            {
-                // Publish your MQTT message here
-                // Example: _ = mqttClientWrapper.PublishAsync("your/topic", "your message");
-                UpdateUIAndPublishGame(currentgame);
-            }
         }
 
         //This method is called when the AddGame button is clicked
@@ -285,7 +268,7 @@ namespace HA_Game_SPy
                 var detectedGame = games.FirstOrDefault(game => // Find the first game in the list of games that matches a running process
                     runningProcesses.Any(p =>
                         p.ProcessName.Equals(Path.GetFileNameWithoutExtension(game.ExecutableName), StringComparison.OrdinalIgnoreCase)));
-                
+
                 if (detectedGame != null) // If a game is detected
                 {
                     currentgame = detectedGame;
@@ -338,6 +321,24 @@ namespace HA_Game_SPy
         {
         }
 
+        private void gameMediaElement_MediaEnded(object sender, RoutedEventArgs e)
+        {
+            // Only loop if the source is a GIF
+            if (gameMediaElement.Source != null && gameMediaElement.Source.AbsoluteUri.EndsWith(".gif", StringComparison.OrdinalIgnoreCase))
+            {
+                gameMediaElement.Position = TimeSpan.Zero;
+                gameMediaElement.Play();
+            }
+        }
+
+        private void InitializeMqttPublishTimer()
+        {
+            mqttPublishTimer = new Timer(60000); // Set the interval to 60 seconds
+            mqttPublishTimer.Elapsed += OnMqttPublishTimerElapsed;
+            mqttPublishTimer.AutoReset = true; // Reset the timer after it elapses
+            mqttPublishTimer.Enabled = true; // Enable the timer
+        }
+
         // This method is called when the "ListGame" button is clicked
         private void ListGame_Click(object sender, RoutedEventArgs e)
         {
@@ -388,7 +389,6 @@ namespace HA_Game_SPy
                 // Deserialize the JSON string into a Settings object
                 settings = JsonConvert.DeserializeObject<Settings>(json);
                 // Set the Home Assistant URL text box value
-               
 
                 // Check if the encrypted MQTT password exists
                 if (settings.EncryptedMqttPassword != null)
@@ -445,6 +445,16 @@ namespace HA_Game_SPy
             MyNotifyIcon.Visibility = Visibility.Collapsed;
         }
 
+        private void OnMqttPublishTimerElapsed(object sender, ElapsedEventArgs e)
+        {
+            if (mqttClientWrapper != null && mqttClientWrapper.IsConnected)
+            {
+                // Publish your MQTT message here
+                // Example: _ = mqttClientWrapper.PublishAsync("your/topic", "your message");
+                UpdateUIAndPublishGame(currentgame);
+            }
+        }
+
         // This method is called when the timer event is triggered
         private void OnTimedEvent(Object source, System.Timers.ElapsedEventArgs e)
         {
@@ -496,7 +506,6 @@ namespace HA_Game_SPy
 
             // Update the HomeAssistantUrl property of the settings object with the value from the
             // txtHAUrl TextBox
-           
 
             // Encrypt the MqttPassword value from the txtMqttPassword PasswordBox and assign it to
             // the EncryptedMqttPassword property of the settings object
@@ -663,18 +672,6 @@ namespace HA_Game_SPy
             // Publish attributes including device ID
             _ = mqttClientWrapper.PublishAsync(attributesTopic, attributesPayload);
         }
-
-        private void gameMediaElement_MediaEnded(object sender, RoutedEventArgs e)
-        {
-            // Only loop if the source is a GIF
-            if (gameMediaElement.Source != null && gameMediaElement.Source.AbsoluteUri.EndsWith(".gif", StringComparison.OrdinalIgnoreCase))
-            {
-                gameMediaElement.Position = TimeSpan.Zero;
-                gameMediaElement.Play();
-            }
-        }
-
-
 
         #endregion Private Methods
     }

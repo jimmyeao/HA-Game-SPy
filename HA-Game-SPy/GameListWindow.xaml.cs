@@ -2,17 +2,10 @@
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.IO;
 
 namespace HA_Game_SPy
 {
@@ -21,11 +14,25 @@ namespace HA_Game_SPy
     /// </summary>
     public partial class GameListWindow : Window
     {
+        #region Public Constructors
+
         // This class represents a window that displays a list of games
         public GameListWindow()
         {
             InitializeComponent();
             LoadGames(); // Load the games when the window is initialized
+        }
+
+        #endregion Public Constructors
+
+        #region Private Methods
+
+        // This method is called when the "Add New Game" button is clicked
+        private void AddNewGame_Click(object sender, RoutedEventArgs e)
+        {
+            GameAddWindow addWindow = new GameAddWindow(); // Create a new instance of the GameAddWindow
+            addWindow.ShowDialog(); // Show the window as a dialog
+            LoadGames(); // Reload the games after adding a new game
         }
 
         // This method loads the games asynchronously
@@ -48,15 +55,6 @@ namespace HA_Game_SPy
             }
 
             return new List<GameInfo>(); // Return an empty list if the file doesn't exist
-        }
-
-        // This method is called when the "Add New Game" button is clicked
-        private void AddNewGame_Click(object sender, RoutedEventArgs e)
-        {
-            GameAddWindow addWindow = new GameAddWindow(); // Create a new instance of the GameAddWindow
-            addWindow.ShowDialog(); // Show the window as a dialog
-            LoadGames(); // Reload the games after adding a new game
-            
         }
 
         // This method is called when the "Save Changes" button is clicked
@@ -84,7 +82,6 @@ namespace HA_Game_SPy
             this.Close(); // Close the window after saving
         }
 
-
+        #endregion Private Methods
     }
-
 }
