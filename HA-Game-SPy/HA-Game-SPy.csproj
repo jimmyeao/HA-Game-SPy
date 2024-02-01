@@ -6,8 +6,8 @@
     <RootNamespace>HA_Game_SPy</RootNamespace>
     <Nullable>enable</Nullable>
     <UseWPF>true</UseWPF>
-    <AssemblyVersion>1.1.0.112</AssemblyVersion>
-    <FileVersion>1.1.0.112</FileVersion>
+    <AssemblyVersion>1.1.0.116</AssemblyVersion>
+    <FileVersion>1.1.0.116</FileVersion>
     <ApplicationIcon>trans.ico</ApplicationIcon>
     <PackageIcon>download.png</PackageIcon>
     <Title>$(AssemblyName)</Title>
@@ -39,10 +39,10 @@
   <ItemGroup>
     <PackageReference Include="Hardcodet.NotifyIcon.Wpf" Version="1.1.0" />
     <PackageReference Include="MaterialDesignThemes" Version="4.9.0" />
-    <PackageReference Include="MQTTnet" Version="4.3.1.873" />
-    <PackageReference Include="MQTTnet.Extensions.ManagedClient" Version="4.3.1.873" />
+    <PackageReference Include="MQTTnet" Version="4.3.3.952" />
+    <PackageReference Include="MQTTnet.Extensions.ManagedClient" Version="4.3.3.952" />
     <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
-    <PackageReference Include="XamlAnimatedGif" Version="2.2.0" />
+    <PackageReference Include="XamlAnimatedGif" Version="2.2.1" />
   </ItemGroup>
 
   <ItemGroup>

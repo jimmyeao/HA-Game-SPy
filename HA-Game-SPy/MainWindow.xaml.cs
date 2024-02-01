@@ -621,6 +621,11 @@ namespace HA_Game_SPy
         // Method to update the UI and publish game information
         private void UpdateUIAndPublishGame(GameInfo game)
         {
+            // only doi this if mqtt is connected
+            if (mqttClientWrapper == null || !mqttClientWrapper.IsConnected)
+            {
+                return;
+            }
             Dispatcher.Invoke(async () =>
             {
                 detectedGameText.Text = $"Detected Game: {game.GameName}";
